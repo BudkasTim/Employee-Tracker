@@ -49,6 +49,7 @@ inquirer
     if (response.employeeTitle === "Manager") {
         let addManager =new Manager(response.name, response.id, response.email, response.officeNumber);
         employees.push(addManager);
+        renderEmployee();
         console.log("Success!");
     }
     //engineer hiring
@@ -63,7 +64,9 @@ inquirer
             .then( function(response){
             let addEngineer =new Engineer(response.name, response.id, response.email, response.github);
             employees.push(addEngineer);
+            renderEmployee();
             console.log("You just hired an Engineer");
+            
         });
     } else if (response.employeeTitle === "Intern") {
         inquirer
@@ -76,7 +79,9 @@ inquirer
             .then( function(response){
             let addIntern =new Intern(response.name, response.id, response.email, response.school);
             employees.push(addIntern);
+            renderEmployee();
             console.log(" Maybe future an Engineer?");
+            
         });
     }
 
@@ -93,7 +98,10 @@ createTeam();
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
-
+function renderEmployee(){
+       fs.writeFileSync(outputPath,render(employees),'utf-8');
+}
+renderEmployee();
 // HINT: each employee type (manager, engineer, or intern) has slightly different
 // information; write your code to ask different questions via inquirer depending on
 // employee type.
