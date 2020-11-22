@@ -10,10 +10,78 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
+var employees=[];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
+function createTeam(){
+inquirer
+  .prompt([
+    {
+        type: "list",
+        message: "What is the title of the employee ?",
+        name: "employeeTitle",
+        choices:["Manager","Engineer","Intern"]
+      },
+    {
+      type: "input",
+      message: "Please enter name",
+      name: "name"
+    },
+    {
+        type: "input",
+        message: "Please enter employee id. ",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "Please enter office number",
+        name: "officeNumber"
+    },
+    {
+        type: "input",
+        message: "Please email address",
+        name: "email"
+    }
+  ])
+  .then(function(response) {
+    // manager hiring
+    if (response.employeeTitle === "Manager") {
+        let addManager =new Manager(response.name, response.id, response.email, response.officeNumber);
+        employees.push(addManager);
+        console.log("Success!");
+    }
+    //engineer hiring
+    else if (response.employeeTitle === "Engineer") {
+        inquirer
+            .prompt([
+                {   
+                    type: "input",
+                    message: "Please enter GitHub user name.",
+                    name: "github"
+                },])
+            .then( function(response){
+            let addEngineer =new Engineer(response.name, response.id, response.email, response.github);
+            employees.push(addEngineer);
+            console.log("You just hired an Engineer");
+        });
+    } else if (response.employeeTitle === "Intern") {
+        inquirer
+            .prompt([
+                {   
+                    type: "input",
+                    message: "What school do you attend.",
+                    name: "school"
+                },])
+            .then( function(response){
+            let addIntern =new Intern(response.name, response.id, response.email, response.school);
+            employees.push(addIntern);
+            console.log(" Maybe future an Engineer?");
+        });
+    }
+
+  });
+}
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
